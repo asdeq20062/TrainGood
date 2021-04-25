@@ -11,7 +11,7 @@ CREATE TABLE users (
     last_name VARCHAR(20),
     age INT,
     pt_exp FLOAT,
-    is_pt BOOLEAN,
+    is_pt BOOLEAN NOT NULL,
     icon_url VARCHAR(255),
     pt_rate INT
 );

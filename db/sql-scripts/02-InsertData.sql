@@ -2,7 +2,8 @@ USE traingood;
 
 INSERT INTO users (
     username,
-    pw
+    pw,
+    is_pt
 )
 VALUES
-    ('admin', 'admin');
+    ('admin', 'admin', FALSE);
