@@ -9,7 +9,7 @@ CREATE TABLE users (
     email VARCHAR(40),
     first_name VARCHAR(20),
     last_name VARCHAR(20),
-    age INT,
+    birthday DATETIME,
     pt_exp FLOAT,
     is_pt BOOLEAN NOT NULL,
     icon_url VARCHAR(255),
