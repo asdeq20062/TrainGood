@@ -7,3 +7,4 @@ backend/node_modules
 
 # Ignore api env
 backend/.env
+
