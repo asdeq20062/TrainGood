@@ -107,13 +107,30 @@ app.post('/login', async function (req, res){
     let result = await db_query(db, sql_query);
     res.setHeader('Content-Type', 'application/json');
     if(result[0]){
-        res.json({success: true, result: result[0]});
+        payload.id = result[0].id;
+        let token = sign_token(payload);
+        res.json({success: true, token: token});
     }else{
-        res.json({success: false, result: []});
+        res.json({success: false});
     }
 })
 
 // Request member's details
+/*
+    @param {string} req.decoded_token
+    @param {string} req.decoded_token.usernme
+    @param {string} req.decoded_token.pw
+    @param {int} req.decoded_token.id
+    @param {int} req.decoded_token.iat
+    @param {exp} req.decoded_token.exp
+*/
+app.post('/memberdetails', verify_token, async function (req, res){
+    let user_id = db.escape(req.decoded_token.id);
+    let sql_query = `SELECT * FROM users WHERE id = ${user_id}`;
+    let result = await db_query(db, sql_query);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(result);
+})
 
 // Update member's details
 

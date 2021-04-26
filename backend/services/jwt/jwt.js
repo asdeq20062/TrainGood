@@ -7,6 +7,7 @@ const secret = process.env['JWT_SERCET'] || 'gymisgood';
 
 /*
     @param {Object} payload
+    @param {int} payload.id
     @param {string} payload.username
     @param {string} payload.pw
 */
@@ -21,16 +22,22 @@ function sign_token(payload){
     return token;
 }
 
-
+/*
+    @param {Object} req.body
+    @param {string} req.body.token
+*/
 function verify_token(req, res, next){
     res.setHeader('Content-Type', 'application/json');
     let token = req.body.token;
     try{
         let decode = jwt.verify(token, secret);
+        // Pass decoded token to next middleware
+        req.decoded_token = decode;
     }
     catch{
         res.json({success: false});
     }
+
     next();
 }
 
