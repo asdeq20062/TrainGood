@@ -34,10 +34,13 @@ app.get('/', verify_token, async function (req, res){
 app.post('/signup', async function (req, res){
     // Check payload
     let username = db.escape(req.body.username);
+<<<<<<< HEAD
 
     // Check whether the username is duplicate
 
     // Continue to check payload
+=======
+>>>>>>> 454bb97 (Add escape function to prevent SQL injection)
     let pw = db.escape(req.body.pw);
     let phone_num = db.escape(req.body.phone_num);
     let email = db.escape(req.body.email);
@@ -55,11 +58,16 @@ app.post('/signup', async function (req, res){
         birthday = db.escape(req.body.birthday);
     }
 
+<<<<<<< HEAD
     // Continue to check payload
+=======
+    // Continue
+>>>>>>> 454bb97 (Add escape function to prevent SQL injection)
     let pt_exp = db.escape(req.body.pt_exp);
     let is_pt = db.escape(req.body.is_pt);
     let icon_url = db.escape(req.body.icon_url);
 
+<<<<<<< HEAD
     // Insert a new member
     let sql_query = `INSERT INTO users (
         username,
@@ -82,6 +90,29 @@ app.post('/signup', async function (req, res){
         ${birthday},
         ${pt_exp},
         ${is_pt},
+=======
+    let sql_query = `INSERT INTO users (\
+        username,\
+        pw,\
+        phone_num,\
+        email,\
+        first_name,\
+        last_name,\
+        birthday,\
+        pt_exp,\
+        is_pt,\
+        icon_url\
+        ) VALUES (\
+        ${username},\
+        ${pw},\
+        ${phone_num},\
+        ${email},\
+        ${first_name},\
+        ${last_name},\
+        ${birthday},\
+        ${pt_exp},\
+        ${is_pt},\
+>>>>>>> 454bb97 (Add escape function to prevent SQL injection)
         ${icon_url}
         )`;
     let result = await db_query(db, sql_query);
