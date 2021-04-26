@@ -4,10 +4,6 @@ const {database, db_query} = require('./services/db/mysql');
 require('dotenv').config(); 
 const {sign_token, verify_token} = require('./services/jwt/jwt.js');
 const bodyParser = require('body-parser');
-<<<<<<< HEAD
-=======
-const moment = require('moment');
->>>>>>> 7cf8a84 (Add login function)
 
 // Connect db
 const db = database();
@@ -38,19 +34,10 @@ app.get('/', verify_token, async function (req, res){
 app.post('/signup', async function (req, res){
     // Check payload
     let username = db.escape(req.body.username);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 7cf8a84 (Add login function)
 
     // Check whether the username is duplicate
 
     // Continue to check payload
-<<<<<<< HEAD
-=======
->>>>>>> 454bb97 (Add escape function to prevent SQL injection)
-=======
->>>>>>> 7cf8a84 (Add login function)
     let pw = db.escape(req.body.pw);
     let phone_num = db.escape(req.body.phone_num);
     let email = db.escape(req.body.email);
@@ -68,21 +55,11 @@ app.post('/signup', async function (req, res){
         birthday = db.escape(req.body.birthday);
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     // Continue to check payload
-=======
-    // Continue
->>>>>>> 454bb97 (Add escape function to prevent SQL injection)
-=======
-    // Continue to check payload
->>>>>>> 7cf8a84 (Add login function)
     let pt_exp = db.escape(req.body.pt_exp);
     let is_pt = db.escape(req.body.is_pt);
     let icon_url = db.escape(req.body.icon_url);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     // Insert a new member
     let sql_query = `INSERT INTO users (
         username,
@@ -105,32 +82,6 @@ app.post('/signup', async function (req, res){
         ${birthday},
         ${pt_exp},
         ${is_pt},
-=======
-=======
-    // Insert a new member
->>>>>>> 7cf8a84 (Add login function)
-    let sql_query = `INSERT INTO users (\
-        username,\
-        pw,\
-        phone_num,\
-        email,\
-        first_name,\
-        last_name,\
-        birthday,\
-        pt_exp,\
-        is_pt,\
-        icon_url\
-        ) VALUES (\
-        ${username},\
-        ${pw},\
-        ${phone_num},\
-        ${email},\
-        ${first_name},\
-        ${last_name},\
-        ${birthday},\
-        ${pt_exp},\
-        ${is_pt},\
->>>>>>> 454bb97 (Add escape function to prevent SQL injection)
         ${icon_url}
         )`;
     let result = await db_query(db, sql_query);
@@ -155,17 +106,11 @@ app.post('/login', async function (req, res){
     let result = await db_query(db, sql_query);
     res.setHeader('Content-Type', 'application/json');
     if(result[0]){
-<<<<<<< HEAD
         payload.id = result[0].id;
         let token = sign_token(payload);
         res.json({success: true, token: token});
     }else{
         res.json({success: false});
-=======
-        res.json({success: true, result: result[0]});
-    }else{
-        res.json({success: false, result: []});
->>>>>>> 7cf8a84 (Add login function)
     }
 })
 
