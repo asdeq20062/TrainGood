@@ -34,12 +34,12 @@ app.get('/', verify_token, async function (req, res){
 */
 app.post('/signup', async function (req, res){
     // Check payload
-    let username = req.body.username;
-    let pw = req.body.pw;
-    let phone_num = req.body.phone_num || "NULL";
-    let email = req.body.email || "NULL";
-    let first_name = req.body.first_name || "NULL";
-    let last_name = req.body.last_name || "NULL";
+    let username = db.escape(req.body.username);
+    let pw = db.escape(req.body.pw);
+    let phone_num = db.escape(req.body.phone_num);
+    let email = db.escape(req.body.email);
+    let first_name = db.escape(req.body.first_name);
+    let last_name = db.escape(req.body.last_name);
     
     // Change to datetime format
     let birthday;
@@ -47,15 +47,15 @@ app.post('/signup', async function (req, res){
         let year = req.body.birthday.split('-')[0];
         let month = req.body.birthday.split('-')[1];
         let day = req.body.birthday.split('-')[2];
-        birthday = moment(new Date(year, month - 1, day)).format('YYYY-MM-DD HH:mm:ss');
+        birthday = db.escape(new Date(year, month - 1, day));
     } else {
-        birthday = "NULL";
+        birthday = db.escape(req.body.birthday);
     }
 
     // Continue
-    let pt_exp = req.body.pt_exp || "NULL";
-    let is_pt = req.body.is_pt;
-    let icon_url = req.body.icon_url || "NULL";
+    let pt_exp = db.escape(req.body.pt_exp);
+    let is_pt = db.escape(req.body.is_pt);
+    let icon_url = db.escape(req.body.icon_url);
 
     let sql_query = `INSERT INTO users (\
         username,\
@@ -69,16 +69,16 @@ app.post('/signup', async function (req, res){
         is_pt,\
         icon_url\
         ) VALUES (\
-        '${username}',\
-        '${pw}',\
-        '${phone_num}',\
-        '${email}',\
-        '${first_name}',\
-        '${last_name}',\
-        '${birthday}',\
+        ${username},\
+        ${pw},\
+        ${phone_num},\
+        ${email},\
+        ${first_name},\
+        ${last_name},\
+        ${birthday},\
         ${pt_exp},\
         ${is_pt},\
-        '${icon_url}'
+        ${icon_url}
         )`;
     let result = await db_query(db, sql_query);
     res.setHeader('Content-Type', 'application/json');
