@@ -3,7 +3,7 @@ const app = express();
 const {database, db_query} = require('./services/db/mysql');
 require('dotenv').config(); 
 const {sign_token, verify_token} = require('./services/jwt/jwt.js');
-const bodyParser = require(('body-parser'));
+const bodyParser = require('body-parser');
 const moment = require('moment');
 
 // Connect db
@@ -35,6 +35,10 @@ app.get('/', verify_token, async function (req, res){
 app.post('/signup', async function (req, res){
     // Check payload
     let username = db.escape(req.body.username);
+
+    // Check whether the username is duplicate
+
+    // Continue to check payload
     let pw = db.escape(req.body.pw);
     let phone_num = db.escape(req.body.phone_num);
     let email = db.escape(req.body.email);
@@ -52,11 +56,12 @@ app.post('/signup', async function (req, res){
         birthday = db.escape(req.body.birthday);
     }
 
-    // Continue
+    // Continue to check payload
     let pt_exp = db.escape(req.body.pt_exp);
     let is_pt = db.escape(req.body.is_pt);
     let icon_url = db.escape(req.body.icon_url);
 
+    // Insert a new member
     let sql_query = `INSERT INTO users (\
         username,\
         pw,\
@@ -86,6 +91,27 @@ app.post('/signup', async function (req, res){
 })
 
 // Log in
+/*
+    @param {Object} req.body
+    @param {string} req.body.username
+    @param {string} req.body.pw
+*/
+app.post('/login', async function (req, res){
+    let payload = {
+        username: req.body.username,
+        pw: req.body.pw
+    };
+    let sql_username = db.escape(req.body.username);
+    let sql_pw = db.escape(req.body.pw);
+    let sql_query = `SELECT * FROM users WHERE username = ${sql_username} AND pw = ${sql_pw}`;
+    let result = await db_query(db, sql_query);
+    res.setHeader('Content-Type', 'application/json');
+    if(result[0]){
+        res.json({success: true, result: result[0]});
+    }else{
+        res.json({success: false, result: []});
+    }
+})
 
 // Request member's details
 

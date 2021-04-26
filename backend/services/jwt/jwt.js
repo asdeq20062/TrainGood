@@ -7,21 +7,17 @@ const secret = process.env['JWT_SERCET'] || 'gymisgood';
 
 /*
     @param {Object} payload
-    @param {int} payload.id
     @param {string} payload.username
     @param {string} payload.pw
 */
 function sign_token(payload){
-    let token = jwt.sign({
-                    id: payload.id,
-                    username: payload.username,
-                    pw: payload.pw
-                },
-                secret,
-                {
-                    expiresIn: "24h"
-                }
-                );
+    let token = jwt.sign(
+        payload,
+        secret,
+        {
+            expiresIn: "24h"
+        }
+        );
     return token;
 }
 
