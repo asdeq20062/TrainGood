@@ -7,6 +7,7 @@ const secret = process.env['JWT_SERCET'] || 'gymisgood';
 
 /*
     @param {Object} payload
+    @param {int} payload.id
     @param {string} payload.username
     @param {string} payload.pw
 */
