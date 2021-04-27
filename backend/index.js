@@ -222,7 +222,7 @@ app.post('/ratept', verify_token, async function (req, res){
 
 // Show all personal trainers
 app.post('/showallpt', async function (req, res){
-
+    console.log('test.');
 })
 
 
