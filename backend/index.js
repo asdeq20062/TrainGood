@@ -121,7 +121,7 @@ app.post('/login', async function (req, res){
     @param {string} req.decoded_token.pw
     @param {int} req.decoded_token.id
     @param {int} req.decoded_token.iat
-    @param {exp} req.decoded_token.exp
+    @param {float} req.decoded_token.exp
 */
 app.post('/memberdetails', verify_token, async function (req, res){
     let user_id = db.escape(req.decoded_token.id);
@@ -133,12 +133,12 @@ app.post('/memberdetails', verify_token, async function (req, res){
 
 // Update member's details
 /*
-    @param {string} req.decoded_token
+    @param {Object} req.decoded_token
     @param {string} req.decoded_token.usernme
     @param {string} req.decoded_token.pw
     @param {int} req.decoded_token.id
     @param {int} req.decoded_token.iat
-    @param {exp} req.decoded_token.exp
+    @param {float} req.decoded_token.exp
     @param {Object} req.body
     @param {string} req.body.pw
     @param {string} req.body.phone_num
@@ -196,8 +196,31 @@ app.post('/updatememberdetails', verify_token, async function (req, res){
 })
 
 // Rate the personal trainer
+/*
+    @param {Object} req.body
+    @param {int} req.body.id
+    @param {int} req.body.rate Range: 1-5
+*/
+app.post('/ratept', verify_token, async function (req, res){
+    let pt_id = db.escape(req.body.id);
+    let rate = req.body.rate;
 
-// Request personal trainers
+    // Get the existing rate
+    let sql_query = `SELECT pt_rate FROM users WHERE id = ${pt_id}`;
+    let query_result = await db_query(db, sql_query);
+    let existing_rate = query_result[0].pt_rate == null? rate: query_result[0].pt_rate;
+
+    // Avg the rate
+    let new_rate = Math.round((rate + existing_rate)/2);
+
+    // Update the pt's rating
+    sql_query = `UPDATE users SET pt_rate = ${new_rate} WHERE id = ${pt_id}`;
+    let result = await db_query(db, sql_query);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(result);
+})
+
+// Show all personal trainers
 
 
 const server = app.listen(process.env.PORT || 8080, function(){
