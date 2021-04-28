@@ -11,12 +11,6 @@ const db = database();
 // Parse Json
 app.use(bodyParser.json());
 
-// Show all users
-app.get('/', verify_token, async function (req, res){
-    let alluser = await db_query(db, 'SELECT * FROM users');
-    console.log(alluser);
-})
-
 // Sign up
 /*
     @param {Object} req.body
