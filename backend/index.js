@@ -32,12 +32,18 @@ app.get('/', verify_token, async function (req, res){
     @param {icon_url} req.body.url
 */
 app.post('/signup', async function (req, res){
-    // Check payload
+    res.setHeader('Content-Type', 'application/json');
+    // Assign payload
     let username = db.escape(req.body.username);
 
     // Check whether the username is duplicate
+    let sql_query = `SELECT * FROM users WHERE username = ${username}`;
+    let check_username_exist = await db_query(db, sql_query);
+    if(check_username_exist.length!=0){
+        return res.json({success: false, err:'Username exists.'});
+    }
 
-    // Continue to check payload
+    // Continue to assign payload
     let pw = db.escape(req.body.pw);
     let phone_num = db.escape(req.body.phone_num);
     let email = db.escape(req.body.email);
@@ -55,13 +61,13 @@ app.post('/signup', async function (req, res){
         birthday = db.escape(req.body.birthday);
     }
 
-    // Continue to check payload
+    // Continue to assign payload
     let pt_exp = db.escape(req.body.pt_exp);
     let is_pt = db.escape(req.body.is_pt);
     let icon_url = db.escape(req.body.icon_url);
 
     // Insert a new member
-    let sql_query = `INSERT INTO users (
+    sql_query = `INSERT INTO users (
         username,
         pw,
         phone_num,
@@ -84,9 +90,13 @@ app.post('/signup', async function (req, res){
         ${is_pt},
         ${icon_url}
         )`;
-    let result = await db_query(db, sql_query);
-    res.setHeader('Content-Type', 'application/json');
-    res.json({result: result});
+    try{
+        await db_query(db, sql_query);
+        return res.json({success: true});
+    } catch(err){
+        return res.json({success: false});
+    }
+    
 })
 
 // Log in
@@ -108,9 +118,9 @@ app.post('/login', async function (req, res){
     if(result[0]){
         payload.id = result[0].id;
         let token = sign_token(payload);
-        res.json({success: true, token: token});
+        return res.json({success: true, token: token});
     }else{
-        res.json({success: false});
+        return res.json({success: false});
     }
 })
 
@@ -151,7 +161,8 @@ app.post('/memberdetails', verify_token, async function (req, res){
     @param {icon_url} req.body.url
 */
 app.post('/updatememberdetails', verify_token, async function (req, res){
-    // Check payload
+    res.setHeader('Content-Type', 'application/json');
+    // Assign payload
     let pw = db.escape(req.body.pw);
     let phone_num = db.escape(req.body.phone_num);
     let email = db.escape(req.body.email);
@@ -169,12 +180,12 @@ app.post('/updatememberdetails', verify_token, async function (req, res){
         birthday = db.escape(req.body.birthday);
     }
 
-    // Continue to check payload
+    // Continue to assign payload
     let pt_exp = db.escape(req.body.pt_exp);
     let is_pt = db.escape(req.body.is_pt);
     let icon_url = db.escape(req.body.icon_url);
 
-    // Check decoded token id
+    // Assign decoded token id
     let user_id = req.decoded_token.id;
 
     // Update the member's details
@@ -190,39 +201,65 @@ app.post('/updatememberdetails', verify_token, async function (req, res){
     icon_url = ${icon_url}
     WHERE id = ${user_id}`;
 
-    let result = await db_query(db, sql_query);
-    res.setHeader('Content-Type', 'application/json');
-    res.json(result);
+    try{
+        await db_query(db, sql_query);
+        return res.json({success: true});
+    } catch (err) {
+        return res.json({success: false});
+    }
+    
 })
 
 // Rate the personal trainer
 /*
     @param {Object} req.body
-    @param {int} req.body.id
+    @param {int} req.body.pt_id
     @param {int} req.body.rate Range: 1-5
+    @param {Object} req.decoded_token
+    @param {string} req.decoded_token.usernme
+    @param {string} req.decoded_token.pw
+    @param {int} req.decoded_token.id
+    @param {int} req.decoded_token.iat
+    @param {float} req.decoded_token.exp
 */
 app.post('/ratept', verify_token, async function (req, res){
-    let pt_id = db.escape(req.body.id);
-    let rate = req.body.rate;
 
-    // Get the existing rate
-    let sql_query = `SELECT pt_rate FROM users WHERE id = ${pt_id}`;
-    let query_result = await db_query(db, sql_query);
-    let existing_rate = query_result[0].pt_rate == null? rate: query_result[0].pt_rate;
+    let pt_id = db.escape(req.body.pt_id);
+    let rate = db.escape(req.body.rate);
+    let user_id = db.escape(req.decoded_token.id);
 
-    // Avg the rate
-    let new_rate = Math.round((rate + existing_rate)/2);
+    // Check whether the user rates itself
+    if(pt_id == user_id){
+        return res.json({success: false, err: `You can not rate yourself.`});
+    }
 
-    // Update the pt's rating
-    sql_query = `UPDATE users SET pt_rate = ${new_rate} WHERE id = ${pt_id}`;
-    let result = await db_query(db, sql_query);
+    // Check whether the user has rated the personal trainer
+    let sql_query = `SELECT * FROM pt_rate WHERE user_id = ${user_id} AND pt_id = ${pt_id}`;
+    let query_result = await db_query(db, sql_query); 
+    let is_duplicate = query_result.length != 0? true: false;
+
+    // Insert rating record
     res.setHeader('Content-Type', 'application/json');
-    res.json(result);
+    if(!is_duplicate){
+        sql_query = `INSERT INTO pt_rate (user_id, pt_id, rating) VALUES (${user_id}, ${pt_id}, ${rate})`;
+        await db_query(db, sql_query);
+        return res.json({success: true});
+    } else {
+        return res.json({success: false, err: `You 've rated this personal trainer before.`});
+    }
 })
 
 // Show all personal trainers
-app.post('/showallpt', async function (req, res){
-    console.log('test4.');
+app.get('/showallpt', async function (req, res){
+    let sql_query = `SELECT users.id, users.phone_num, users.email, users.first_name,
+    users.last_name, users.pt_exp, users.icon_url, AVG(pt_rate.rating) FROM users 
+    LEFT JOIN pt_rate
+    ON users.id = pt_rate.pt_id
+    WHERE users.is_pt = 1
+    GROUP BY users.id`;
+    let query_result = await db_query(db, sql_query);
+    res.setHeader('Content-Type', 'application/json');
+    return res.json(query_result);
 })
 
 

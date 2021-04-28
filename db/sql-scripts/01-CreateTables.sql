@@ -13,5 +13,11 @@ CREATE TABLE users (
     pt_exp FLOAT,
     is_pt BOOLEAN NOT NULL,
     icon_url VARCHAR(255),
-    pt_rate INT
+);
+
+CREATE TABLE pt_rate (
+    record_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    pt_id INT,
+    rating INT
 );
