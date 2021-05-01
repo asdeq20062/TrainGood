@@ -8,6 +8,9 @@ const bodyParser = require('body-parser');
 // Connect db
 const db = database();
 
+// Personal Trainers in each page
+const page_item_count = 10;
+
 // Parse Json
 app.use(bodyParser.json());
 
@@ -244,16 +247,28 @@ app.post('/ratept', verify_token, async function (req, res){
 })
 
 // Show all personal trainers
-app.get('/showallpt', async function (req, res){
+app.get('/showallpt/:page', async function (req, res){
+    let page = (req.params.page - 1 )*page_item_count;
     let sql_query = `SELECT users.id, users.phone_num, users.email, users.first_name,
     users.last_name, users.pt_exp, users.icon_url, AVG(pt_rate.rating) FROM users 
     LEFT JOIN pt_rate
     ON users.id = pt_rate.pt_id
     WHERE users.is_pt = 1
-    GROUP BY users.id`;
+    GROUP BY users.id
+    LIMIT ${page}, ${page_item_count}
+    `;
     let query_result = await db_query(db, sql_query);
     res.setHeader('Content-Type', 'application/json');
     return res.json(query_result);
+})
+
+// Count all personal trainers
+app.get('/countallpt', async function (req, res){
+    let sql_query = `SELECT count(*) as count FROM users WHERE is_pt = true`;
+    let query_result = await db_query(db, sql_query);
+    let res_result = {count: query_result[0].count, item_count: page_item_count};
+    res.setHeader('Content-Type', 'application/json');
+    return res.json(res_result);
 })
 
 
