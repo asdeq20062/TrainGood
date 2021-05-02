@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme=>({
       position: 'relative',
       top: '56px',
       backgroundColor: 'silver',
-      height: '100%'
+      minHeight: '100vh'
     },
     pageRoot: {
         position: 'relative',
@@ -54,7 +54,7 @@ export default function showpt({data, totalpages, currentpage}) {
                 <Pagination 
                     count={totalpages} 
                     onChange={handleChangePage} 
-                    page={curPage}
+                    page={Number(curPage)}
                     renderItem={
                         (item) => (
                             <PaginationItem

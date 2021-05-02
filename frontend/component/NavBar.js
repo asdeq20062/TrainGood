@@ -76,6 +76,7 @@ export default function MenuAppBar() {
               <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
               <Link href="/showpt/1"><MenuItem onClick={handleClose}>Find Personal Trainers</MenuItem></Link>
               <MenuItem onClick={handleClose}>My account</MenuItem>
+              <Link href="/signup"><MenuItem onClick={handleClose}>Sign Up</MenuItem></Link>
             </Menu>
           </div>
         </Toolbar>
