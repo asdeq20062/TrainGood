@@ -4,6 +4,10 @@ const {database, db_query} = require('./services/db/mysql');
 require('dotenv').config(); 
 const {sign_token, verify_token} = require('./services/jwt/jwt.js');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
+// Set cors
+app.use(cors());
 
 // Connect db
 const db = database();

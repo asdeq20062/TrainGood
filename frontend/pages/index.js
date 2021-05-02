@@ -2,6 +2,7 @@ import styles from '../styles/Home.module.css';
 import { makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { ButtonGroup } from '@material-ui/core';
+import Link from 'next/link';
 
 const useStyles = makeStyles((theme)=>({
   home:{
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme)=>({
   },
   btngroup: {
     position: 'absolute',
-    top: '80%'
+    top: '80%',
   },
   slogan1: {
     position: 'absolute',
@@ -55,12 +56,16 @@ export default function Home() {
           for an effective workout.
         </div>
         <ButtonGroup variant="contained" className={classes.btngroup}>
-          <Button variant="contained">
-            Sign Up
-          </Button>
-          <Button variant="contained">
-            Find
-          </Button>
+        <Link href="/signup">
+            <Button variant="contained">    
+                Sign Up
+            </Button>
+          </Link>
+          <Link href="/showpt/1">
+            <Button variant="contained">    
+                Find
+            </Button>
+          </Link>
         </ButtonGroup>
       </section>
       <section className={classes.section2}>

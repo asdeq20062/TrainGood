@@ -26,11 +26,11 @@ export default function PtCard(props) {
   const imgerrorhandle= (e) => {
     e.target.src = '/no-icon.png';
   }
-
+  
   return (
     <Card className={classes.root}>
       <CardActionArea>
-        <img src={props.ptdata.icon_url?props.ptdata.icon_url:null} 
+        <img src={props.ptdata.icon_url && props.ptdata.icon_url!="" ?props.ptdata.icon_url:'/no-icon.png'} 
           className={classes.media}
           onError={imgerrorhandle}
           ></img>
