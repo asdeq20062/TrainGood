@@ -44,6 +44,7 @@ export default function RatePt(props) {
     return (
     <div className={classes.root}>
         <Rating
+        name={props.ptID.toString()}
         precision={0.5}
         onChange={handleChange}
         />
