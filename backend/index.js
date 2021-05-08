@@ -225,7 +225,7 @@ app.post('/updatememberdetails', verify_token, async function (req, res){
 */
 app.post('/ratept', verify_token, async function (req, res){
 
-    let pt_id = db.escape(req.body.pt_id);
+    let pt_id = db.escape(req.body.id);
     let rate = db.escape(req.body.rate);
     let user_id = db.escape(req.decoded_token.id);
 

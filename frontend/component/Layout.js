@@ -1,3 +1,4 @@
+import CheckTokenExpired from './CheckTokenExpired';
 import NavBar from './NavBar';
 
 export default function Layout(props) {
@@ -5,6 +6,7 @@ export default function Layout(props) {
     return(
         <div>
             <NavBar/>
+            <CheckTokenExpired/>
             {children}
         </div>
     )
