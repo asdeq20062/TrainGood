@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PtCard from '../../component/PtCard';
+import PtCard from '../../component/PtPage/PtCard';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
 import { Grid } from '@material-ui/core';

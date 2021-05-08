@@ -33,32 +33,32 @@ const useStyles = makeStyles((theme) => ({
 
 var initFormDate = {
 
-    pw: null,
+    pw: '',
     pwError: false,
     pwErrorText: '',
 
-    first_name: null,
-    last_name: null,
+    first_name: '',
+    last_name: '',
 
-    phone_num: null,
+    phone_num: '',
     phoneNumError: false,
     phoneNumErrorText: '',
 
-    email: null,
+    email: '',
     emailError: false,
     emailErrorText: '',
 
-    birthday: null,
+    birthday: '',
     birthdayError: false,
     birthdayErrorText: '',
 
-    is_pt: null,
+    is_pt: '',
 
-    pt_exp: null,
+    pt_exp: '',
     ptexpError: false,
     ptexpErrorText: '',
 
-    icon_url: null
+    icon_url: ''
 }
 
 export default function SignUp() {
@@ -76,7 +76,6 @@ export default function SignUp() {
         });
         accountInformation = await accountInformation.json();
         accountInformation = accountInformation[0];
-        console.log(accountInformation);
 
         // Create a Date object for birthday
         let birthday = new Date(accountInformation.birthday);

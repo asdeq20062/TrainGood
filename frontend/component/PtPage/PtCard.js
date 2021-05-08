@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import RatePt from './RatePt';
 
 const useStyles = makeStyles({
   root: {
@@ -47,6 +48,8 @@ export default function PtCard(props) {
             <b>Experience:</b> {props.ptdata.pt_exp? props.ptdata.pt_exp:0} years
             <br></br>
             <b>Rating:</b> { (+props.ptdata.rating).toFixed(1) || 0 }
+            <br></br>
+            <RatePt id={props.ptdata.id} ptID={props.ptdata.id}/>
           </Typography>
         </CardContent>
       </CardActionArea>

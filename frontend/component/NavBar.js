@@ -33,6 +33,7 @@ export default function MenuAppBar() {
   const open = Boolean(anchorEl);
 
   useEffect(()=>{
+    // Check whether the token exists
     if(localStorage.getItem('access') != null){
       setLogined(true);
     } else {
