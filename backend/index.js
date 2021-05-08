@@ -119,7 +119,7 @@ app.post('/login', async function (req, res){
     if(result[0]){
         payload.id = result[0].id;
         let token = sign_token(payload);
-        return res.json({success: true, token: token});
+        return res.json({success: true, token: token, id: payload.id, username: req.body.username});
     }else{
         return res.json({success: false});
     }
@@ -254,16 +254,21 @@ app.post('/ratept', verify_token, async function (req, res){
 app.get('/showallpt/:page', async function (req, res){
     let page = (req.params.page - 1 )*page_item_count;
     let sql_query = `SELECT users.id, users.phone_num, users.email, users.first_name,
-    users.last_name, users.pt_exp, users.icon_url, AVG(pt_rate.rating) FROM users 
+    users.last_name, users.pt_exp, users.icon_url, AVG(pt_rate.rating) as rating FROM users 
     LEFT JOIN pt_rate
     ON users.id = pt_rate.pt_id
     WHERE users.is_pt = 1
     GROUP BY users.id
     LIMIT ${page}, ${page_item_count}
     `;
-    let query_result = await db_query(db, sql_query);
-    res.setHeader('Content-Type', 'application/json');
-    return res.json(query_result);
+    try{
+        let query_result = await db_query(db, sql_query);
+        res.setHeader('Content-Type', 'application/json');
+        return res.json(query_result);
+    }catch{
+        res.setHeader('Content-Type', 'application/json');
+        return res.json({success: false, err: `Invalid page.`});
+    }
 })
 
 // Count all personal trainers

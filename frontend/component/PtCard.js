@@ -9,6 +9,7 @@ const useStyles = makeStyles({
   root: {
     width: '300px',
     maxHeight: '350px',
+    minHeight: '300px',
     textAlign: 'center',
     justifyContent: 'center',
     backgroundColor: 'silver',
@@ -44,6 +45,8 @@ export default function PtCard(props) {
             <b>Phone:</b> {props.ptdata.phone_num}
             <br></br>
             <b>Experience:</b> {props.ptdata.pt_exp? props.ptdata.pt_exp:0} years
+            <br></br>
+            <b>Rating:</b> { (+props.ptdata.rating).toFixed(1) || 0 }
           </Typography>
         </CardContent>
       </CardActionArea>

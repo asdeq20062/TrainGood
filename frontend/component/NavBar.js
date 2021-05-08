@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -29,8 +29,16 @@ const useStyles = makeStyles((theme) => ({
 export default function MenuAppBar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [logined, setLogined] = useState(null);
   const open = Boolean(anchorEl);
 
+  useEffect(()=>{
+    if(localStorage.getItem('access') != null){
+      setLogined(true);
+    } else {
+      setLogined(false);
+    }
+  });
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -75,8 +83,22 @@ export default function MenuAppBar() {
             >
               <Link href="/"><MenuItem onClick={handleClose}>Home</MenuItem></Link>
               <Link href="/showpt/1"><MenuItem onClick={handleClose}>Find Personal Trainers</MenuItem></Link>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <Link href="/signup"><MenuItem onClick={handleClose}>Sign Up</MenuItem></Link>
+              {
+                !logined && (
+                  <div>
+                    <Link href="/signup"><MenuItem onClick={handleClose}>Sign Up</MenuItem></Link>
+                    <Link href="/login"><MenuItem onClick={handleClose}>Login</MenuItem></Link>
+                  </div>
+                )
+              }
+              {
+                logined && (
+                  <div>
+                    <Link href="/myaccount"><MenuItem onClick={handleClose}>My account</MenuItem></Link>
+                    <Link href="/logout"><MenuItem onClick={handleClose}>{localStorage.getItem('username')}, Logout</MenuItem></Link>
+                  </div>
+                )
+              }
             </Menu>
           </div>
         </Toolbar>
