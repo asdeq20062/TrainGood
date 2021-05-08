@@ -9,10 +9,10 @@ import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme=>({
     root: {
-      position: 'relative',
-      top: '56px',
-      backgroundColor: 'silver',
-      minHeight: '100vh'
+        position: 'relative',
+        top: '56px',
+        backgroundColor: 'silver',
+        minHeight: '100vh'
     },
     pageRoot: {
         position: 'relative',
@@ -52,7 +52,9 @@ export default function showpt({data, totalpages, currentpage}) {
                 justify="center"
             >
                 <Pagination 
-                    count={totalpages} 
+                    hideNextButton={true}
+                    hidePrevButton={true}
+                    count={Number(totalpages)} 
                     onChange={handleChangePage} 
                     page={Number(curPage)}
                     renderItem={
@@ -76,7 +78,7 @@ export async function getServerSideProps({params}){
         {method: 'GET'}
     );
     const totalpt = await count.json();
-    const totalpages = Math.round(totalpt.count/totalpt.item_count);
+    const totalpages = Math.ceil(totalpt.count/totalpt.item_count);
 
     // fetch personal trainers
     const res = await fetch(process.env.API_HOST + 'showallpt/' + params.page,

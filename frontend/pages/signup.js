@@ -79,10 +79,12 @@ export default function SignUp() {
         let newFormData = {...formData};
         let validFlag = true;
         let spaceRegExr = / /g;
-        let emailRegExr = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g;
-        let numberRegExr = /^[0-9]*$/g;
         let floatRegExr = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/g;
         let phoneRegExr = /^[1-9][0-9]*$/g;
+        let monthRegExr = /^(0[1-9]|1[0-2])$/g;
+        let yearRegExr = /\d{4}/g;
+        let dayRegExr = /(0[1-9]|[12]\d|3[01])/g;
+        let emailRegExr = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g;
 
         // Username
         let username = document.querySelector('#username');
@@ -145,8 +147,8 @@ export default function SignUp() {
         let month = document.querySelector('#bmonth').value? document.querySelector('#bmonth').value: 0;
         let day = document.querySelector('#bday').value? document.querySelector('#bday').value: 0;
 
-        if(!numberRegExr.test(year) || !numberRegExr.test(month) || !numberRegExr.test(day)){ // Check if number
-            newFormData = {...newFormData, birthdayError: true, birthdayErrorText:`Year/ Month/ Day of birth should be number`};
+        if(!yearRegExr.test(year) || !monthRegExr.test(month) || !dayRegExr.test(day)){ // Check format
+            newFormData = {...newFormData, birthdayError: true, birthdayErrorText:`Year/ Month/ Day of birth should be YYYY-MM-DD`};
             validFlag = false;
         } else {
             let birthday = year + '-' + month + '-' + day;
@@ -203,8 +205,8 @@ export default function SignUp() {
             <TextField error={formData.usernameError} helperText={formData.usernameErrorText} id="username" label="Username"/>
             </div>
             <div>
-            <TextField error={formData.pwError} helperText={formData.pwErrorText} id="pw" label="Password"/>
-            <TextField error={formData.pwError} helperText={formData.pwErrorText} id="pw2" label="Confirmed Password"/>
+            <TextField type="password" error={formData.pwError} helperText={formData.pwErrorText} id="pw" label="Password"/>
+            <TextField type="password" error={formData.pwError} helperText={formData.pwErrorText} id="pw2" label="Confirmed Password"/>
             </div>
             <div>
             <TextField id="first_name" label="First Name"/>
