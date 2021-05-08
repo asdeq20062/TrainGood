@@ -40,7 +40,7 @@ export default function showpt({data, totalpages, currentpage}) {
                 {
                     data.map(pt =>
                         {
-                            return <Grid item xs align="center"><PtCard ptdata = {pt}/></Grid>
+                            return <Grid key={pt.id} item xs align="center"><PtCard ptdata = {pt}/></Grid>
                         }
                     )
                 }

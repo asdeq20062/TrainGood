@@ -40,7 +40,7 @@ export default function PtCard(props) {
           <Typography gutterBottom variant="h5" component="h2">
             {props.ptdata.first_name} {props.ptdata.last_name}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography variant="body2" color="textSecondary" component="span">
             <b>Email:</b> {props.ptdata.email}
             <br></br>
             <b>Phone:</b> {props.ptdata.phone_num}
