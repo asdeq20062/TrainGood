@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme)=>({
   section1: {
     backgroundImage: `url('/section1-bg.jpg')`,
     backgroundSize: 'cover',
+    backgroundPosition: 'center',
     width: '100vw',
     height: '100vh',
     display: 'flex',
@@ -18,12 +19,14 @@ const useStyles = makeStyles((theme)=>({
   },
   section2: {
     backgroundImage: `url('/section2-bg.jpg')`,
+    backgroundPosition: 'center',
     backgroundSize: 'cover',
     width: '100vw',
     height: '100vh'
   },
   section3: {
     backgroundImage: `url('/section3-bg.jpg')`,
+    backgroundPosition: 'center',
     backgroundSize: 'cover',
     width: '100vw',
     height: '100vh'

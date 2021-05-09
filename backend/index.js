@@ -231,7 +231,7 @@ app.post('/ratept', verify_token, async function (req, res){
 
     // Check whether the user rates itself
     if(pt_id == user_id){
-        return res.json({success: false, err: `You can not rate yourself.`});
+        return res.json({success: false, err: `You cannot rate yourself.`});
     }
 
     // Check whether the user has rated the personal trainer
@@ -246,7 +246,7 @@ app.post('/ratept', verify_token, async function (req, res){
         await db_query(db, sql_query);
         return res.json({success: true});
     } else {
-        return res.json({success: false, err: `You 've rated this personal trainer before.`});
+        return res.json({success: false, err: `You've rated this personal trainer before.`});
     }
 })
 

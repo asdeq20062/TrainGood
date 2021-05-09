@@ -9,16 +9,18 @@ import RatePt from './RatePt';
 const useStyles = makeStyles({
   root: {
     width: '300px',
-    maxHeight: '300px',
     minHeight: '300px',
     textAlign: 'center',
     justifyContent: 'center',
     backgroundColor: 'silver',
     margin: '10px'
   },
+  area: {
+    height: '100%'
+  },
   media: {
     height: 150,
-    width: 'auto'
+    width: 150
   },
 });
 
@@ -31,7 +33,7 @@ export default function PtCard(props) {
   
   return (
     <Card className={classes.root}>
-      <CardActionArea>
+      <CardActionArea className={classes.area}>
         <img src={props.ptdata.icon_url && props.ptdata.icon_url!="" ?props.ptdata.icon_url:'/no-icon.png'} 
           className={classes.media}
           onError={imgerrorhandle}

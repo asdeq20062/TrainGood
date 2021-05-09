@@ -37,6 +37,8 @@ var initFormDate = {
     pwError: false,
     pwErrorText: '',
 
+    pw2: '',
+
     first_name: '',
     last_name: '',
 
@@ -51,6 +53,10 @@ var initFormDate = {
     birthday: '',
     birthdayError: false,
     birthdayErrorText: '',
+
+    birthdayYear: '',
+    birthdayMonth: '',
+    birthdayDay: '',
 
     is_pt: '',
 
@@ -228,21 +234,21 @@ export default function SignUp() {
         <fieldset>
             <legend>Personal Information</legend>
             <div>
-            <TextField type="password" error={formData.pwError} helperText={formData.pwErrorText} id="pw" label="Password" value={formData.pw} onChange={handleChange('pw')} variant={formData.pw?'filled':'standard'}/>
-            <TextField type="password" error={formData.pwError} helperText={formData.pwErrorText} id="pw2" label="Confirmed Password" value={formData.pw2} onChange={handleChange('pw2')} variant={formData.pw2?'filled':'standard'}/>
+            <TextField type="password" error={formData.pwError} helperText={formData.pwErrorText} id="pw" label="Password" value={formData.pw} onChange={handleChange('pw')}/>
+            <TextField type="password" error={formData.pwError} helperText={formData.pwErrorText} id="pw2" label="Confirmed Password" value={formData.pw2} onChange={handleChange('pw2')}/>
             </div>
             <div>
-            <TextField id="first_name" label="First Name" value={formData.first_name} onChange={handleChange('first_name')} variant={formData.first_name?'filled':'standard'} />
-            <TextField id="last_name" label="Last Name" value={formData.last_name} onChange={handleChange('last_name')}  variant={formData.last_name?'filled':'standard'}/>
+            <TextField id="first_name" label="First Name" value={formData.first_name} onChange={handleChange('first_name')}/>
+            <TextField id="last_name" label="Last Name" value={formData.last_name} onChange={handleChange('last_name')}/>
             </div>
             <div>
-            <TextField error={formData.phoneNumError} helperText={formData.phoneNumErrorText} id="phone_num" label="Phone" value={formData.phone_num} onChange={handleChange('phone_num')}  variant={formData.phone_num?'filled':'standard'}/>
-            <TextField error={formData.emailError} helperText={formData.emailErrorText} id="email" label="Email" value={formData.email} onChange={handleChange('email')}  variant={formData.email?'filled':'standard'}/>
+            <TextField error={formData.phoneNumError} helperText={formData.phoneNumErrorText} id="phone_num" label="Phone" value={formData.phone_num} onChange={handleChange('phone_num')}/>
+            <TextField error={formData.emailError} helperText={formData.emailErrorText} id="email" label="Email" value={formData.email} onChange={handleChange('email')}/>
             </div>
             <div>
-            <TextField error={formData.birthdayError} helperText={formData.birthdayErrorText} id="byear" label="Year of Birth" value={formData.birthdayYear} onChange={handleChange('birthdayYear')}  variant={formData.birthdayYear?'filled':'standard'}/>
-            <TextField error={formData.birthdayError} helperText={formData.birthdayErrorText} id="bmonth" label="Month of Birth" value={formData.birthdayMonth} onChange={handleChange('birthdayMonth')}  variant={formData.birthdayMonth?'filled':'standard'}/>
-            <TextField error={formData.birthdayError} helperText={formData.birthdayErrorText} id="bday" label="Day of Birth" value={formData.birthdayDay} onChange={handleChange('birthdayDay')}  variant={formData.birthdayDay?'filled':'standard'}/>
+            <TextField error={formData.birthdayError} helperText={formData.birthdayErrorText} id="byear" label="Year of Birth" value={formData.birthdayYear} onChange={handleChange('birthdayYear')} />
+            <TextField error={formData.birthdayError} helperText={formData.birthdayErrorText} id="bmonth" label="Month of Birth" value={formData.birthdayMonth} onChange={handleChange('birthdayMonth')}/>
+            <TextField error={formData.birthdayError} helperText={formData.birthdayErrorText} id="bday" label="Day of Birth" value={formData.birthdayDay} onChange={handleChange('birthdayDay')}/>
             </div>
         </fieldset>
         <fieldset style={{marginTop: '10px', marginBottom: '10px'}}>
@@ -255,10 +261,10 @@ export default function SignUp() {
                 </RadioGroup>
             </div>
             <div>
-            <TextField error={formData.ptexpError} helperText={formData.ptexpErrorText} id="pt_exp" label="Experience (Years)"  value={formData.pt_exp} onChange={handleChange('pt_exp')}  variant={formData.pt_exp?'filled':'standard'}/>
+            <TextField error={formData.ptexpError} helperText={formData.ptexpErrorText} id="pt_exp" label="Experience (Years)"  value={formData.pt_exp} onChange={handleChange('pt_exp')}/>
             </div>
             <div>
-            <TextField id="icon_url" label="Icon URL"  value={formData.icon_url} onChange={handleChange('icon_url')}  variant={formData.icon_url?'filled':'standard'}/>
+            <TextField id="icon_url" label="Icon URL"  value={formData.icon_url} onChange={handleChange('icon_url')}/>
             </div> 
         </fieldset>
         <Button variant="contained" onClick={handleSubmit}>Update</Button>
