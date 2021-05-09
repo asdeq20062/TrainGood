@@ -12,7 +12,16 @@ function checkTokenExpired(expiryTime){
     return isExpired;
 }
 
+function getCorrectApiHost(){
+    if(typeof(window)==='undefined'){
+        return process.env.SERVER_API_HOST;
+    } else {
+        return process.env.BROWSER_API_HOST;
+    }
+}
+
 module.exports = {
     getExpiryTimeFromToken,
-    checkTokenExpired
+    checkTokenExpired,
+    getCorrectApiHost
 }

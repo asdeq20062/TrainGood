@@ -9,7 +9,7 @@ import RatePt from './RatePt';
 const useStyles = makeStyles({
   root: {
     width: '300px',
-    maxHeight: '350px',
+    maxHeight: '300px',
     minHeight: '300px',
     textAlign: 'center',
     justifyContent: 'center',

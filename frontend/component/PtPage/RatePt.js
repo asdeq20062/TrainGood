@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
-import Box from '@material-ui/core/Box';
-
+import { getCorrectApiHost } from '../../helper/helper';
 
 const useStyles = makeStyles({
   root: {
@@ -24,7 +22,7 @@ export default function RatePt(props) {
             rate: newValue
         }
         // Send request
-        let result = await fetch(process.env.API_HOST + 'ratept',
+        let result = await fetch(getCorrectApiHost() + 'ratept',
         {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -44,6 +42,7 @@ export default function RatePt(props) {
     return (
     <div className={classes.root}>
         <Rating
+        value={0}
         name={props.ptID.toString()}
         precision={0.5}
         onChange={handleChange}
