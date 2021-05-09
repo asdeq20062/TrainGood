@@ -1,7 +1,7 @@
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Router from 'next/router';
-
+import { getCorrectApiHost } from '../helper/helper';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +31,7 @@ export default function Login (){
         };
 
         // Send request
-        let result = await fetch(process.env.API_HOST + 'login',
+        let result = await fetch(getCorrectApiHost() + 'login',
         {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

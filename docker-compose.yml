@@ -1,0 +1,54 @@
+version: "3"
+
+services:
+    backend:
+        image: traingood_backend
+        container_name: traingood-backend
+        build:
+          context: ./backend
+          dockerfile: ./Dockerfile
+        ports: 
+          - 8080:8080
+        depends_on:
+          - mysql
+        links:
+          - mysql
+        networks:
+          - traingood
+        restart: always
+
+    mysql:
+      image: mysql:8
+      container_name: traingood-db
+      environment:
+        MYSQL_ROOT_PASSWORD: 123456
+      ports:
+        - 3306:3306
+      volumes:
+        - ./db/sql-scripts:/docker-entrypoint-initdb.d
+      networks: 
+        - traingood
+    
+    fronend:
+      image: traingood_frontend
+      container_name: traingood-frontend
+      build:
+        context: ./frontend
+        dockerfile: ./Dockerfile
+      ports:
+        - 3000:3000
+      depends_on: 
+        - mysql
+        - backend
+      links:
+        - mysql
+        - backend
+      networks: 
+        - traingood
+      restart: always
+
+
+
+networks:
+    traingood:
+        driver: bridge

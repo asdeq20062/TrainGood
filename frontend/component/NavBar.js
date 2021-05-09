@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -19,10 +19,15 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     color: 'black',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    height: '100%'
   },
   appBar: {
-    background: `linear-gradient(to bottom right, silver, black)`
+    background: `linear-gradient(to bottom right, black, silver)`,
+    height: '56px'
+  },
+  logo:{
+    height: '56px'
   }
 }));
 
@@ -53,8 +58,8 @@ export default function MenuAppBar() {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h4" className={classes.title}>
-            TrainGood
+          <Typography variant="h4" className={classes.title} >
+            <img className={classes.logo} src="/logo.png"></img>
           </Typography>
           <div>
             <IconButton

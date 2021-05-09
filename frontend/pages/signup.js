@@ -6,7 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
 import Router from 'next/router';
-
+import { getCorrectApiHost } from '../helper/helper';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -180,7 +180,7 @@ export default function SignUp() {
         
         // Send request
         if(validFlag){
-            let result = await fetch(process.env.API_HOST + 'signup',
+            let result = await fetch(getCorrectApiHost() + 'signup',
             {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},

@@ -5,6 +5,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import { Grid } from '@material-ui/core';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import Link from '@material-ui/core/Link';
+import { getCorrectApiHost } from '../../helper/helper'
 
 
 const useStyles = makeStyles(theme=>({
@@ -74,14 +75,14 @@ export default function showpt({data, totalpages, currentpage}) {
 
 export async function getServerSideProps({params}){
 // fetch total of personal trainers
-    const count = await fetch(process.env.API_HOST + 'countallpt',
+    const count = await fetch(getCorrectApiHost() + 'countallpt',
         {method: 'GET'}
     );
     const totalpt = await count.json();
     const totalpages = Math.ceil(totalpt.count/totalpt.item_count);
 
     // fetch personal trainers
-    const res = await fetch(process.env.API_HOST + 'showallpt/' + params.page,
+    const res = await fetch(getCorrectApiHost() + 'showallpt/' + params.page,
         {method: 'GET'}
     );
     const data = await res.json();

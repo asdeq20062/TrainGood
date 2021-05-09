@@ -12,7 +12,7 @@ CREATE TABLE users (
     birthday DATETIME,
     pt_exp FLOAT,
     is_pt BOOLEAN NOT NULL,
-    icon_url VARCHAR(255),
+    icon_url VARCHAR(255)
 );
 
 CREATE TABLE pt_rate (
