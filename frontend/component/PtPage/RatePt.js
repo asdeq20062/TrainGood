@@ -15,6 +15,8 @@ export default function RatePt(props) {
     const classes = useStyles();
 
     const handleChange = async (e, newValue) => {
+        if(!confirm(`You will give this trainer ${newValue} marks?`)) return;
+
         let token = localStorage.getItem('access');
         let payload = {
             id: props.ptID,
@@ -44,8 +46,9 @@ export default function RatePt(props) {
         <Rating
         value={0}
         name={props.ptID.toString()}
-        precision={0.5}
+        precision={1}
         onChange={handleChange}
+        size="large"
         />
     </div>
     );

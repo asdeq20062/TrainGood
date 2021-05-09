@@ -35,7 +35,7 @@ function verify_token(req, res, next){
         req.decoded_token = decode;
     }
     catch{
-        res.json({success: false});
+        return res.json({success: false, err:'Invalid token.'});
     }
 
     next();
