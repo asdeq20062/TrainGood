@@ -1,7 +1,7 @@
 function getExpiryTimeFromToken(token){
     let getMiddlePartOfToken = token.split('.')[1];
-    let decodeToken = new Buffer(getMiddlePartOfToken, 'base64');
-    let expiryTime = (decodeToken.toString()).exp;
+    let decodeToken = atob(getMiddlePartOfToken);
+    let expiryTime = JSON.parse(decodeToken).exp;
     return expiryTime;
 }
 

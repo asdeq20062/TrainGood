@@ -73,6 +73,10 @@ export default function SignUp() {
     const [formData, setFormData] = useState(initFormDate);
 
     useEffect(async ()=>{
+
+        // Check if token expired
+        if(localStorage.getItem('access')==null) return;
+
         // Fetch account's information
         let accountInformation = await fetch(getCorrectApiHost() + 'memberdetails',
         {

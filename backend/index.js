@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const {database, db_query} = require('./services/db/mysql');
-require('dotenv').config(); 
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 const {sign_token, verify_token} = require('./services/jwt/jwt.js');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -283,4 +283,5 @@ app.get('/countallpt', async function (req, res){
 
 const server = app.listen(process.env.PORT || 8080, function(){
     console.log('Server is running...');
+    console.log(`You are using the env.${ process.env.NODE_ENV }. config.`)
 })

@@ -4,7 +4,8 @@
   "description": "API for traingood",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start-prod": "NODE_ENV=prod node index.js",
+    "start-dev": "NODE_ENV=dev node index.js"
   },
   "author": "Edward",
   "license": "ISC",
