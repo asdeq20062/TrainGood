@@ -12,13 +12,16 @@ const useStyles = makeStyles(theme=>({
     root: {
         position: 'relative',
         top: '56px',
-        backgroundColor: 'silver',
-        minHeight: '100vh'
+        backgroundColor: 'silver'
     },
     pageRoot: {
         position: 'relative',
         top: '56px',
         backgroundColor: 'silver'
+    },
+    background: {
+        backgroundColor: 'silver',
+        minHeight: '100vh'
     }
   }));
 
@@ -31,7 +34,7 @@ export default function showpt({data, totalpages, currentpage}) {
     }
 
     return (
-        <>
+        <div className = {classes.background}>
 
             <Grid 
                 className = {classes.root}
@@ -69,7 +72,7 @@ export default function showpt({data, totalpages, currentpage}) {
                     }
                 />
             </Grid>
-        </>
+        </div>
     )
   }
 

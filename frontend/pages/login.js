@@ -38,6 +38,7 @@ export default function Login (){
             body: JSON.stringify(payload)
         });
         result = await result.json();
+        console.log(result);
 
         /* 
             @param {boolean} result.success

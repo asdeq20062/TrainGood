@@ -13,7 +13,7 @@ app.use(cors());
 const db = database();
 
 // Personal Trainers in each page
-const page_item_count = 10;
+const PAGE_ITEM_COUNT = 10;
 
 // Parse Json
 app.use(bodyParser.json());
@@ -33,7 +33,6 @@ app.use(bodyParser.json());
     @param {icon_url} req.body.url
 */
 app.post('/signup', async function (req, res){
-    res.setHeader('Content-Type', 'application/json');
     // Assign payload
     let username = db.escape(req.body.username);
 
@@ -93,9 +92,9 @@ app.post('/signup', async function (req, res){
         )`;
     try{
         await db_query(db, sql_query);
-        return res.json({success: true});
+        return res.status(200).json({success: true});
     } catch(err){
-        return res.json({success: false});
+        return res.status(200).json({success: false});
     }
     
 })
@@ -107,27 +106,25 @@ app.post('/signup', async function (req, res){
     @param {string} req.body.pw
 */
 app.post('/login', async function (req, res){
-    let payload = {
-        username: req.body.username,
-        pw: req.body.pw
-    };
     let sql_username = db.escape(req.body.username);
     let sql_pw = db.escape(req.body.pw);
     let sql_query = `SELECT * FROM users WHERE username = ${sql_username} AND pw = ${sql_pw}`;
     let result = await db_query(db, sql_query);
-    res.setHeader('Content-Type', 'application/json');
     if(result[0]){
-        payload.id = result[0].id;
+        // JSON.parse and JSON.stringify are used to change the textrow to plain object
+        let payload = JSON.parse(JSON.stringify(result[0]));
+        // Delete the 'pw' key for security
+        delete payload.pw;
         let token = sign_token(payload);
-        return res.json({success: true, token: token, id: payload.id, username: req.body.username});
+        return res.status(200).json({success: true, token: token, id: payload.id, username: req.body.username});
     }else{
-        return res.json({success: false});
+        return res.status(200).json({success: false});
     }
 })
 
 // Request member's details
 /*
-    @param {string} req.decoded_token
+    @param {Object} req.decoded_token
     @param {string} req.decoded_token.usernme
     @param {string} req.decoded_token.pw
     @param {int} req.decoded_token.id
@@ -138,8 +135,7 @@ app.post('/memberdetails', verify_token, async function (req, res){
     let user_id = db.escape(req.decoded_token.id);
     let sql_query = `SELECT * FROM users WHERE id = ${user_id}`;
     let result = await db_query(db, sql_query);
-    res.setHeader('Content-Type', 'application/json');
-    res.json(result);
+    return res.status(200).json(result);
 })
 
 // Update member's details
@@ -162,7 +158,7 @@ app.post('/memberdetails', verify_token, async function (req, res){
     @param {icon_url} req.body.url
 */
 app.post('/updatememberdetails', verify_token, async function (req, res){
-    res.setHeader('Content-Type', 'application/json');
+    
     // Assign payload
     let pw = db.escape(req.body.pw);
     let phone_num = db.escape(req.body.phone_num);
@@ -204,9 +200,9 @@ app.post('/updatememberdetails', verify_token, async function (req, res){
 
     try{
         await db_query(db, sql_query);
-        return res.json({success: true});
+        return res.status(200).json({success: true});
     } catch (err) {
-        return res.json({success: false});
+        return res.status(200).json({success: false});
     }
     
 })
@@ -231,7 +227,7 @@ app.post('/ratept', verify_token, async function (req, res){
 
     // Check whether the user rates itself
     if(pt_id == user_id){
-        return res.json({success: false, err: `You cannot rate yourself.`});
+        return res.status(200).json({success: false, err: `You cannot rate yourself.`});
     }
 
     // Check whether the user has rated the personal trainer
@@ -240,34 +236,30 @@ app.post('/ratept', verify_token, async function (req, res){
     let is_duplicate = query_result.length != 0? true: false;
 
     // Insert rating record
-    res.setHeader('Content-Type', 'application/json');
     if(!is_duplicate){
         sql_query = `INSERT INTO pt_rate (user_id, pt_id, rating) VALUES (${user_id}, ${pt_id}, ${rate})`;
         await db_query(db, sql_query);
-        return res.json({success: true});
+        return res.status(200).json({success: true});
     } else {
-        return res.json({success: false, err: `You've rated this personal trainer before.`});
+        return res.status(200).json({success: false, err: `You've rated this personal trainer before.`});
     }
 })
 
 // Show all personal trainers
 app.get('/showallpt/:page', async function (req, res){
-    let page = (req.params.page - 1 )*page_item_count;
+    let page = (req.params.page - 1 ) * PAGE_ITEM_COUNT;
     let sql_query = `SELECT users.id, users.phone_num, users.email, users.first_name,
     users.last_name, users.pt_exp, users.icon_url, AVG(pt_rate.rating) as rating FROM users 
     LEFT JOIN pt_rate
     ON users.id = pt_rate.pt_id
     WHERE users.is_pt = 1
     GROUP BY users.id
-    LIMIT ${page}, ${page_item_count}
-    `;
+    LIMIT ${page}, ${PAGE_ITEM_COUNT}`;
     try{
         let query_result = await db_query(db, sql_query);
-        res.setHeader('Content-Type', 'application/json');
-        return res.json(query_result);
+        return res.status(200).json(query_result);
     }catch{
-        res.setHeader('Content-Type', 'application/json');
-        return res.json({success: false, err: `Invalid page.`});
+        return res.status(200).json({success: false, err: `Invalid page.`});
     }
 })
 
@@ -275,9 +267,8 @@ app.get('/showallpt/:page', async function (req, res){
 app.get('/countallpt', async function (req, res){
     let sql_query = `SELECT count(*) as count FROM users WHERE is_pt = true`;
     let query_result = await db_query(db, sql_query);
-    let res_result = {count: query_result[0].count, item_count: page_item_count};
-    res.setHeader('Content-Type', 'application/json');
-    return res.json(res_result);
+    let res_result = {count: query_result[0].count, item_count: PAGE_ITEM_COUNT};
+    return res.status(200).json(res_result);
 })
 
 

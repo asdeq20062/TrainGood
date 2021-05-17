@@ -75,8 +75,8 @@ export default function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Validation
-        let newFormData = {...formData};
+        // RegExr for validation
+        let newFormData = {...formData}; // temp object for validation
         let validFlag = true;
         let spaceRegExr = / /g;
         let floatRegExr = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/g;
@@ -178,13 +178,16 @@ export default function SignUp() {
             setFormData(newFormData);
         }
         
+        console.log(newFormData);
+        console.log(formData);
+
         // Send request
         if(validFlag){
             let result = await fetch(getCorrectApiHost() + 'signup',
             {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(newFormData)
+                body: JSON.stringify(formData)
             });
             result = await result.json();
             if(result.success){
