@@ -110,8 +110,8 @@ export default function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Validation
-        let newFormData = {...formData};
+        // RegExr for validation
+        let newFormData = {...formData}; // temp object for validation and send as request
         let validFlag = true;
         let spaceRegExr = / /g;
         let floatRegExr = /^[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$/g;
@@ -212,7 +212,11 @@ export default function SignUp() {
             {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(newFormData)
+                /* 
+                    Sending newFormData rather than formData is because
+                    formData will be only renew after this function
+                */
+                body: JSON.stringify(newFormData) 
             });
             result = await result.json();
             if(result.success){
