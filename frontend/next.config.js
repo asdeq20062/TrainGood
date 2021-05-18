@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` })
+require('dotenv').config({ path: `./env/.env.${process.env.NEXT_PUBLIC_APP_ENV}` })
 const webpack = require('webpack')
 
 module.exports = {

@@ -78,7 +78,6 @@ export default function showpt({data, totalpages, currentpage}) {
 
 export async function getServerSideProps({params}){
     // fetch total of personal trainers
-    console.log(getCorrectApiHost());
     const count = await fetch(getCorrectApiHost() + 'countallpt',
         {method: 'GET'}
     );
