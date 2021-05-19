@@ -81,8 +81,7 @@ export default function SignUp() {
         let accountInformation = await fetch(getCorrectApiHost() + 'memberdetails',
         {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({token: localStorage.getItem('access')})
+            headers: {'Content-Type': 'application/json', token: localStorage.getItem('access')}
         });
         accountInformation = await accountInformation.json();
         accountInformation = accountInformation[0];
@@ -211,7 +210,7 @@ export default function SignUp() {
             let result = await fetch(getCorrectApiHost() + 'updatememberdetails',
             {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {'Content-Type': 'application/json', token: localStorage.getItem('access')},
                 /* 
                     Sending newFormData rather than formData is because
                     formData will be only renew after this function

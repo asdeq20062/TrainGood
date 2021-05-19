@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import RatePt from './RatePt';
+import CommentPt from './CommentPt';
+import { Button } from '@material-ui/core';
+import CardActions from '@material-ui/core/CardActions';
+import ShowDetails from './ShowDetails';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme=>({
   root: {
     width: '300px',
     minHeight: '300px',
@@ -15,31 +18,40 @@ const useStyles = makeStyles({
     backgroundColor: 'silver',
     margin: '10px'
   },
-  area: {
-    height: '100%'
-  },
   media: {
     height: 150,
     width: 150
   },
-});
+  comment: {
+    justifyContent: 'center'
+  }
+}));
 
 export default function PtCard(props) {
   const classes = useStyles();
+  const [commentOpen, setCommentOpen] = useState(false);
+  const [showDetailsOpen, setShowDetailsOpen] = useState(false);
 
-  const imgerrorhandle= (e) => {
+  const imgErrorHandle = (e) => {
     e.target.src = '/no-icon.png';
+  }
+
+  const commentOpenHandle = (e) => {
+    commentOpen? setCommentOpen(false): setCommentOpen(true);
+  }
+
+  const showDetailsOpenHandle = (e) => {
+    showDetailsOpen? setShowDetailsOpen(false): setShowDetailsOpen(true);
   }
   
   return (
     <Card className={classes.root}>
-      <CardActionArea className={classes.area}>
         <img src={props.ptdata.icon_url && props.ptdata.icon_url!="" ?props.ptdata.icon_url:'/no-icon.png'} 
           className={classes.media}
-          onError={imgerrorhandle}
+          onError={imgErrorHandle}
           ></img>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
+          <Typography gutterBottom variant="h5" component="h5">
             {props.ptdata.first_name} {props.ptdata.last_name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="span">
@@ -53,8 +65,23 @@ export default function PtCard(props) {
             <br></br>
             <RatePt id={props.ptdata.id} ptID={props.ptdata.id}/>
           </Typography>
+          <CardActions className={classes.comment}>
+            <Button variant="contained" color="primary" onClick={commentOpenHandle}>Comment</Button>
+            <Button variant="contained" color="primary" onClick={showDetailsOpenHandle}>Details</Button>
+          </CardActions>
+          <CommentPt 
+            opened={commentOpen} 
+            openHandle={commentOpenHandle}
+            ptName={props.ptdata.first_name + " " + props.ptdata.last_name}
+            ptID = {props.ptdata.id}
+          />
+          <ShowDetails
+            opened={showDetailsOpen} 
+            openHandle={showDetailsOpenHandle}
+            ptName={props.ptdata.first_name + " " + props.ptdata.last_name}
+            ptID = {props.ptdata.id}
+          />
         </CardContent>
-      </CardActionArea>
     </Card>
   );
 }

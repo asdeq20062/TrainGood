@@ -5,18 +5,15 @@ import Pagination from '@material-ui/lab/Pagination';
 import { Grid } from '@material-ui/core';
 import PaginationItem from '@material-ui/lab/PaginationItem';
 import Link from '@material-ui/core/Link';
-import { getCorrectApiHost } from '../../helper/helper'
+import { getCorrectApiHost } from '../../helper/helper';
 
 
 const useStyles = makeStyles(theme=>({
     root: {
-        position: 'relative',
-        top: '56px',
+        marginTop: '56px',
         backgroundColor: 'silver'
     },
     pageRoot: {
-        position: 'relative',
-        top: '56px',
         backgroundColor: 'silver'
     },
     background: {
@@ -91,6 +88,16 @@ export async function getServerSideProps({params}){
     const data = await res.json();
     return { 
         props: {
+            /*
+                @param {int} data.id
+                @param {string} data.phone_num
+                @param {string} data.email
+                @param {string} data.frist_name
+                @param {string} data.last_name
+                @param {int} data.pt_exp
+                @param {string} data.icon_url
+                @param {float} data.rating
+            */
             data: data,
             totalpages: totalpages,
             currentpage: params.page

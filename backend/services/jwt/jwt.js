@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
-
+const formidable = require('formidable');
 
 // Environment settings
 const secret = process.env['JWT_SERCET'] || 'gymisgood';
@@ -22,19 +22,21 @@ function sign_token(payload){
     return token;
 }
 
+
 /*
     @param {Object} req.body
     @param {string} req.body.token
 */
-function verify_token(req, res, next){
-    res.setHeader('Content-Type', 'application/json');
-    let token = req.body.token;
+async function verify_token(req, res, next){
+
+    let token = req.headers.token;
     try{
         let decode = jwt.verify(token, secret);
         // Pass decoded token to next middleware
         req.decoded_token = decode;
     }
     catch{
+        console.log('Invalid token');
         return res.json({success: false, err:'Invalid token.'});
     }
 
