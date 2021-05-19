@@ -27,7 +27,7 @@ export default function RatePt(props) {
         let result = await fetch(getCorrectApiHost() + 'ratept',
         {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json', token: localStorage.getItem('access')},
             body: JSON.stringify(payload)
         });
         result = await result.json();

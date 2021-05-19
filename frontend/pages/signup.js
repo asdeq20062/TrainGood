@@ -178,8 +178,6 @@ export default function SignUp() {
             setFormData(newFormData);
         }
         
-        console.log(newFormData);
-        console.log(formData);
 
         // Send request
         if(validFlag){

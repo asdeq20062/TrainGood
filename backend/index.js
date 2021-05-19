@@ -5,6 +5,12 @@ require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 const {sign_token, verify_token} = require('./services/jwt/jwt.js');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const formidable = require('formidable');
+const fs = require('fs');
+const path = require('path');
+
+// Use resource
+app.use(express.static('public'));
 
 // Set cors
 app.use(cors());
@@ -271,6 +277,86 @@ app.get('/countallpt', async function (req, res){
     return res.status(200).json(res_result);
 })
 
+// Add comment
+app.post('/addcomment', verify_token, function(req, res){
+    let form = new formidable.IncomingForm()
+    form.parse(req, async function(err, fields, files){
+        if (err) {console.log(err);}
+        // Get current time
+        let currentDate = new Date();
+        let currentDateTime = currentDate.getTime();
+        // Check type of before_photo
+        let typeBeforePhoto;
+        switch(files.before_photo.type){
+            case 'image/jpeg':
+                typeBeforePhoto = 'jpeg';
+                break;
+            case 'image/png':
+                typeBeforePhoto = 'png';
+                break;
+        }
+        // Upload before_photo
+        let beforePhotoPath = files.before_photo.path;
+        let newBeforePhotoPath = path.join('./public/upload/before/', `b_${fields.user_id}_${fields.pt_id}_${currentDateTime}.${typeBeforePhoto}`);
+        fs.readFile(beforePhotoPath, function(err, data){
+            fs.writeFile(newBeforePhotoPath, data, function(err){
+                fs.unlink(beforePhotoPath, function(err){
+                    if (err) {
+                        return res.status(200).json({success: false, err: 'Upload failed.'});
+                    }
+                })
+            })
+        })        
+        // Check type of after_photo
+        let typeAfterPhoto;
+        switch(files.after_photo.type){
+            case 'image/jpeg':
+                typeAfterPhoto = 'jpeg';
+                break;
+            case 'image/png':
+                typeAfterPhoto = 'png';
+                break;
+        }
+        // Upload after_photo
+        let afterPhotoPath = files.after_photo.path;
+        let newAfterPhotoPath = path.join('./public/upload/after/', `b_${fields.user_id}_${fields.pt_id}_${currentDateTime}.${typeBeforePhoto}`);
+        fs.readFile(afterPhotoPath, function(err, data){
+            fs.writeFile(newAfterPhotoPath, data, function(err){
+                fs.unlink(afterPhotoPath, function(err){
+                    if (err) {
+                        return res.status(200).json({success: false, err: 'Upload failed.'});
+                    }
+                })
+            })
+        })
+        // Insert the comment record
+        try{
+            let sql_query = `INSERT INTO pt_comment (user_id, pt_id, comment, before_photo, after_photo, create_date) 
+            VALUES
+            (${db.escape(fields.user_id)}, ${db.escape(fields.pt_id)}, ${db.escape(fields.comment)}, ${db.escape(newBeforePhotoPath)}, ${db.escape(newAfterPhotoPath)}, ${db.escape(fields.create_date)})`;
+            await db_query(db, sql_query);
+            return res.status(200).json({success: true});
+        }catch (err){
+            return res.status(200).json({success: false, err: 'Upload failed.'});
+        }
+    })
+
+})
+
+// Show comments
+app.get('/getcomment/:ptid', async function(req, res){
+    try{
+        let sql_query = `SELECT pt_comment.*, users.first_name as trainee_first_name, users.last_name as trainee_last_name FROM pt_comment 
+        LEFT JOIN users 
+        ON pt_comment.user_id = users.id
+        WHERE pt_id = ${db.escape(req.params.ptid)}`
+        let result = await db_query(db, sql_query);
+        return res.status(200).json({success: true, result: result});
+    } catch (err) {
+        return res.status(200).json({success: false});
+    }
+
+})
 
 const server = app.listen(process.env.PORT || 8080, function(){
     console.log('Server is running...');

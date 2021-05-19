@@ -12,7 +12,7 @@ CREATE TABLE users (
     birthday DATETIME,
     pt_exp FLOAT,
     is_pt BOOLEAN NOT NULL,
-    icon_url VARCHAR(255)
+    icon_url TEXT
 );
 
 CREATE TABLE pt_rate (
@@ -20,4 +20,14 @@ CREATE TABLE pt_rate (
     user_id INT,
     pt_id INT,
     rating INT
+);
+
+CREATE TABLE pt_comment (
+    comment_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    pt_id INT,
+    comment TEXT,
+    before_photo TEXT,
+    after_photo TEXT,
+    create_date DATETIME
 );
