@@ -5,7 +5,7 @@ and comment the trainers.
 ## Demo
 Link: http://traingood-frontend.herokuapp.com/
 
-As Heroku has cold start, please wait for a while to let the server start at first time.
+As Heroku has cold start, please wait for a while to let the server start at first time. In each time, Heroku restarts the server that will clear all data stored before so please don't use the upload service for persistent storage. It is because Heroku just copies the latest uploaded image and runs it in each time of restart.
 
 ## Features of Backend API Server
 | Functions              | Detail                                            | URL                         | Method |
