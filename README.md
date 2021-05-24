@@ -30,6 +30,8 @@ and comment the trainers.
 ### Prerequisites
 
 - [Docker](https://www.docker.com/get-started)
+- [NodeJS](https://nodejs.org/en/)
+- [MySQL](https://www.mysql.com/downloads/)
 
 ### Clone
 
