@@ -1,5 +1,5 @@
 # TrainGood
-A web platform for people to find the personal trainer built with Node.js, Express, NextJS, MySQL, Docker. Trainers can post their details on this website and users can rate
+A web platform for people to find the personal trainer built with Node.js, Express, NextJS, R MySQL, Docker. Trainers can post their details on this website and users can rate
 and comment the trainers.
 
 ## Features of Backend API Server
