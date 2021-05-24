@@ -5,6 +5,8 @@ and comment the trainers.
 ## Demo
 Link: http://traingood-frontend.herokuapp.com/
 
+As Heroku has cold start, please wait for a while to let the server start at first time.
+
 ## Features of Backend API Server
 | Functions              | Detail                                            | URL                         | Method |
 | :--------------------: | ------------------------------------------------- | --------------------------- | ------ |
