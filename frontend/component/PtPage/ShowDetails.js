@@ -7,7 +7,7 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import { getCorrectApiHost } from '../../helper/helper';
-import { Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     dialog:{
@@ -38,20 +38,12 @@ const useStyles = makeStyles((theme) => ({
     pagination: {
         justifyContent: 'center',
         textAlign: 'center'
+    },
+    deleteBtn: {
+        backgroundColor: 'red'
     }
 }));
 
-const initDetails = [{
-    comment_id: '',
-    user_id: '',
-    pt_id: '',
-    comment: '',
-    before_photo: '',
-    after_photo: '',
-    create_date: '',
-    trainee_first_name: '',
-    trainee_last_name: ''
-}]
 
 export default function ShowDetails(props) {
     const classes = useStyles();
@@ -70,12 +62,38 @@ export default function ShowDetails(props) {
                 alert('Fetch failed.');
             }
         }
-    },[props.opened]);
+    },[props.opened, details]);
 
     const handleClose = () => {
         props.openHandle();
     };
 
+    const deleteHandle = async (e) => {
+        e.preventDefault();
+        if(confirm('Confirm to delete?')){
+            // Check whether there are any comments
+            if(details == 0 ){
+                alert('No comment can be deleted.');
+                return;
+            }
+            // Send request
+            let result = await fetch(getCorrectApiHost() + 'delcomment/' + details[curPage - 1].comment_id, 
+            {
+                method: 'GET',
+                headers: { token: localStorage.getItem('access') }
+            });
+            result = await result.json();
+            if(result.success){
+                alert('Comment is deleted successfully.');
+                let nextPage = curPage - 1 <= 0? 1: curPage -1;
+                setCurPage(nextPage);
+            }else{
+                alert(result.err);
+            }
+        }
+    }
+
+    // Remove the 'public/' string in url
     const getRidPublicWord = (url) => {
         let index = url.indexOf('/') + 1;
         return url.slice(index, url.length);
@@ -89,15 +107,25 @@ export default function ShowDetails(props) {
     <div>
         <Dialog open={props.opened} className={classes.dialog}>
             <MuiDialogTitle disableTypography className={classes.title}>
-                <Typography variant="h6">Details of {props.ptName}</Typography>
+                <Typography variant="h6">Clients of {props.ptName}</Typography>
                 <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
                     <CloseIcon />
                 </IconButton>
             </MuiDialogTitle>
-            Trainer ID: {props.ptID}
-            <br></br>
-            {(details?true:false)&&<div>
-                Trainee: {details[curPage - 1].trainee_first_name + ' ' + details[curPage - 1].trainee_last_name }
+            { process.browser && (localStorage.getItem('username') == 'admin')&&
+                <div className={classes.delete}>
+                    <Button onClick={deleteHandle} variant="contained" className={classes.deleteBtn}>Delete</Button>
+                </div>
+            }
+
+            
+            {(details?true:false)&&
+            <div>
+                Trainer ID: {props.ptID}
+                <br></br>
+                Comment ID: {details[curPage - 1].comment_id}
+                <br></br>
+                Client: {details[curPage - 1].trainee_first_name + ' ' + details[curPage - 1].trainee_last_name }
                 <div className={classes.photoContainer}>
                     <div className={classes.photoBox}>
                         <div>Before:</div>
@@ -114,6 +142,7 @@ export default function ShowDetails(props) {
                     <span>{details[curPage - 1].comment}</span>
                 </div>
             </div>}
+
             {(!details) && 'No Data Here.'}
             <Grid 
                 container
