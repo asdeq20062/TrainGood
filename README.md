@@ -1,5 +1,5 @@
 # TrainGood
-A web platform built built with Node.js, Express, NextJS, ReactJS, MaterialUI, MySQL and Docker for people to find personal trainers. Trainers
+A web platform built with Node.js, Express, NextJS, ReactJS, MaterialUI, MySQL and Docker for people to find personal trainers. Trainers
 can post their details on this website and users can rate and comment on the trainers.
 
 ## Demo
