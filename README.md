@@ -1,6 +1,6 @@
 # TrainGood
-A web platform for people to find the personal trainer built with Node.js, Express, NextJS, ReactJS, MaterialUI, MySQL, Docker. Trainers can post their details on this website and users can rate
-and comment the trainers.
+A web platform built built with Node.js, Express, NextJS, ReactJS, MaterialUI, MySQL and Docker for people to find personal trainers. Trainers
+can post their details on this website and users can rate and comment on the trainers.
 
 ## Demo
 Link: http://traingood-frontend.herokuapp.com/
@@ -16,17 +16,17 @@ As Heroku has cold start, please wait for a while to let the server start at fir
 | Update member details | Users can change their personal information. | /updatememberdetails | Post |
 | Rate trainers | Users can rate the trainers. | /ratept | Post |
 | Show all trainers | 1. Users can find all trainers and their information. <br> 2. Pagination was used. | /showallpt/:page | Get |
-| Count all trainers | Users can find the total of trainers in this websites. | /countallpt | Get |
-| Add comment | 1. Users can comment the trainer. <br> 2. Users can upload their photos of training result before and after trained by the trainer. | /addcomment | Post |
-| Show comment | 1. Users can view all comments on the trainer. <br> 2. Pagination was used. | /getcomment/:ptid | Get |
-| Delete comment | 1. Admin account can delete the comment. <br> 2. If the user is not the admin, he cannot deleted the comment. | /delcomment/:commentid | Get |
+| Count all trainers | Users can find the total number of trainers in this website. | /countallpt | Get |
+| Add comment | 1. Users can comment on the trainer. <br> 2. Users can upload their photos of training result before and after trained by the trainer. | /addcomment | Post |
+| Show comment | 1. Users can view all comments for the trainer. <br> 2. Pagination was used. | /getcomment/:ptid | Get |
+| Delete comment | 1. Admin account can delete the comment. <br> 2. If the user is not the admin, he cannot delete the comment. | /delcomment/:commentid | Get |
 | Show the top trainers | Users can view the top trainers with the highest rating. | /bestpt | Get |
 
 ## Features of Frontend API Server
 | Functions              | Detail                                            | URL                         |
 | :--------------------: | ------------------------------------------------- | --------------------------- |
 | Home Page | 1. You can find the signup and showing trainers button here. <br> 2. You can find the top trainers here. | / |
-| Find all trainers | 1. You can find all trainers <br> 2. You can rate trainers. <br> 3. You can comment trainers. | /showpt/:page |
+| Find all trainers | 1. You can find all trainers <br> 2. You can rate trainers. <br> 3. You can comment on trainers. | /showpt/:page |
 | Sign Up | You can sign up an account. | /signup |
 | Login | You can login here. | /login |
 
