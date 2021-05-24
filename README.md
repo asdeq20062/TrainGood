@@ -17,7 +17,15 @@ and comment the trainers.
 | Delete comment | 1. Admin account can delete the comment. 2. If the user is not the admin, he cannot deleted the comment. | /delcomment/:commentid | Get |
 | Show the top trainers | Users can view the top trainers with the highest rating. | /bestpt | Get |
 
-## Installation of Backend API Server
+## Features of Frontend API Server
+| Functions              | Detail                                            | URL                         |
+| :--------------------: | ------------------------------------------------- | --------------------------- |
+| Home Page | 1. You can find the signup and showing trainers button here. <br> 2. You can find the top trainers here. | / |
+| Find all trainers | 1. You can find all trainers <br> 2. You can rate trainers. <br> 3. You can comment trainers. | /showpt/:page |
+| Sign Up | You can sign up an account. | /signup |
+| Login | You can login here. | /login |
+
+## Installation
 
 ### Prerequisites
 
@@ -93,7 +101,7 @@ heroku container:push web
 heroku container:release web
 ```
 
-4. Other than deploying on Heroku, you just input the following commands on your local machine:
+4. Other than deploying on Heroku, you just input the following command on your local machine:
 ```
 docker compose up
 ```
