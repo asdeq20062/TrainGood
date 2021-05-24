@@ -89,7 +89,7 @@ heroku container:login
 docker buildx build --platform linux/amd64 -t <myapp> .
 docker tag <myapp> registry.heroku.com/<myapp>/web
 docker push registry.heroku.com/<myapp>/web
-heroku container:release web -a <myapp?>
+heroku container:release web -a <myapp>
 ```
 3.2. Other than Macbook with M1 chipset. 
 ```
