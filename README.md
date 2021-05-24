@@ -2,6 +2,9 @@
 A web platform for people to find the personal trainer built with Node.js, Express, NextJS, ReactJS, MaterialUI, MySQL, Docker. Trainers can post their details on this website and users can rate
 and comment the trainers.
 
+## Demo
+Link: http://traingood-frontend.herokuapp.com/
+
 ## Features of Backend API Server
 | Functions              | Detail                                            | URL                         | Method |
 | :--------------------: | ------------------------------------------------- | --------------------------- | ------ |
