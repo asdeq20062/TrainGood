@@ -75,6 +75,7 @@ export default function CommentPt(props) {
             body: payload
         });
         result = await result.json();
+        if(!result.success) alert(result.err);
         handleClose();
     }
 

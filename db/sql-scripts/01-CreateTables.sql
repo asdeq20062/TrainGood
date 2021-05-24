@@ -19,7 +19,9 @@ CREATE TABLE pt_rate (
     record_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     pt_id INT,
-    rating INT
+    rating INT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (pt_id) REFERENCES users(id)
 );
 
 CREATE TABLE pt_comment (
@@ -29,5 +31,6 @@ CREATE TABLE pt_comment (
     comment TEXT,
     before_photo TEXT,
     after_photo TEXT,
-    create_date DATETIME
+    create_date DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

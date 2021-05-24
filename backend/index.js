@@ -8,6 +8,8 @@ const cors = require('cors');
 const formidable = require('formidable');
 const fs = require('fs');
 const path = require('path');
+const { getImgType } = require('./helper/getImgType.js');
+const { uploadImg } = require('./helper/uploadImg');
 
 // Use resource
 app.use(express.static('public'));
@@ -281,54 +283,25 @@ app.get('/countallpt', async function (req, res){
 app.post('/addcomment', verify_token, function(req, res){
     let form = new formidable.IncomingForm()
     form.parse(req, async function(err, fields, files){
-        if (err) {console.log(err);}
+        if (err) console.log(err);
         // Get current time
         let currentDate = new Date();
         let currentDateTime = currentDate.getTime();
-        // Check type of before_photo
-        let typeBeforePhoto;
-        switch(files.before_photo.type){
-            case 'image/jpeg':
-                typeBeforePhoto = 'jpeg';
-                break;
-            case 'image/png':
-                typeBeforePhoto = 'png';
-                break;
-        }
+
+        // Get type of before_photo
+        let typeBeforePhoto = getImgType(files.before_photo.type);
+
         // Upload before_photo
-        let beforePhotoPath = files.before_photo.path;
-        let newBeforePhotoPath = path.join('./public/upload/before/', `b_${fields.user_id}_${fields.pt_id}_${currentDateTime}.${typeBeforePhoto}`);
-        fs.readFile(beforePhotoPath, function(err, data){
-            fs.writeFile(newBeforePhotoPath, data, function(err){
-                fs.unlink(beforePhotoPath, function(err){
-                    if (err) {
-                        return res.status(200).json({success: false, err: 'Upload failed.'});
-                    }
-                })
-            })
-        })        
-        // Check type of after_photo
-        let typeAfterPhoto;
-        switch(files.after_photo.type){
-            case 'image/jpeg':
-                typeAfterPhoto = 'jpeg';
-                break;
-            case 'image/png':
-                typeAfterPhoto = 'png';
-                break;
-        }
+        let newBeforePhotoPath = uploadImg(res, files.before_photo.path, fields, 'before', currentDateTime, typeBeforePhoto);
+        if(!newBeforePhotoPath) return res.status(200).json({success: false, err: `Upload before_photo failed.`});
+
+        // Get type of before_photo
+        let typeAfterPhoto = getImgType(files.after_photo.type);
+
         // Upload after_photo
-        let afterPhotoPath = files.after_photo.path;
-        let newAfterPhotoPath = path.join('./public/upload/after/', `b_${fields.user_id}_${fields.pt_id}_${currentDateTime}.${typeBeforePhoto}`);
-        fs.readFile(afterPhotoPath, function(err, data){
-            fs.writeFile(newAfterPhotoPath, data, function(err){
-                fs.unlink(afterPhotoPath, function(err){
-                    if (err) {
-                        return res.status(200).json({success: false, err: 'Upload failed.'});
-                    }
-                })
-            })
-        })
+        let newAfterPhotoPath = uploadImg(res, files.after_photo.path, fields, 'after', currentDateTime, typeAfterPhoto);
+        if(!newAfterPhotoPath) return res.status(200).json({success: false, err: `Upload after_photo failed.`});
+
         // Insert the comment record
         try{
             let sql_query = `INSERT INTO pt_comment (user_id, pt_id, comment, before_photo, after_photo, create_date) 
@@ -337,7 +310,7 @@ app.post('/addcomment', verify_token, function(req, res){
             await db_query(db, sql_query);
             return res.status(200).json({success: true});
         }catch (err){
-            return res.status(200).json({success: false, err: 'Upload failed.'});
+            return res.status(200).json({success: false, err: 'Comment failed.'});
         }
     })
 
@@ -356,6 +329,61 @@ app.get('/getcomment/:ptid', async function(req, res){
         return res.status(200).json({success: false});
     }
 
+})
+
+// Delete comments only for admin account
+app.get('/delcomment/:commentid', verify_token, async function(req, res){
+    // Check whether the user is admin
+    if(req.decoded_token.username != 'admin'){
+        return res.status(200).json({sucess: false, err: `You don't have right to do this.`})
+    }
+
+    // Delete the before_photo and after_photo
+    try{
+        let sql_query = `SELECT * FROM pt_comment WHERE comment_id = ${db.escape(req.params.commentid)}`;
+        let result = await db_query(db, sql_query);
+        let deletePhoto = [];
+        deletePhoto.push(path.join('./', result[0].before_photo));
+        deletePhoto.push(path.join('./', result[0].after_photo));
+        for(let i = 0; i<deletePhoto.length; i++){
+            fs.unlinkSync(deletePhoto[i]);
+        }
+    } catch (err){
+        console.log(err);
+        return res.status(200).json({success: false, err: `Delete photos failed.`});
+    }
+
+    // Delete record from database
+    try{
+        let sql_query = `DELETE FROM pt_comment WHERE comment_id = ${db.escape(req.params.commentid)}`;
+        let result = await db_query(db, sql_query);
+        return res.status(200).json({success: true});
+    }catch (err){
+        console.log(err);
+        return res.status(200).json({success: false, err: `Delete comments failed.`});
+    }
+})
+
+// Get the trainer of the highest rating
+app.get('/bestpt', async function(req, res){
+    let sql_query = `
+    SELECT pt_id as id, first_name, last_name, icon_url, phone_num, email, pt_exp, avg_rating as rating FROM
+    (SELECT *, avg(rating) as avg_rating FROM pt_rate GROUP BY pt_id) as rating_table
+    LEFT JOIN users
+    ON rating_table.pt_id = users.id
+    WHERE is_pt=true`;
+    let result = await db_query(db, sql_query);
+    // Change the type of avg_rating to float
+    let tmpArr = result.map((items) => {
+        return (Number.parseFloat(items.rating));
+    })
+    // Get the max value
+    let max = Math.max(...tmpArr);
+    // Filter the index of max rating records
+    let maxRecord = result.filter((item, index, array)=>{
+        return (Number.parseFloat(item.rating)) == max;
+    })
+    return res.status(200).json(maxRecord);
 })
 
 const server = app.listen(process.env.PORT || 8080, function(){
