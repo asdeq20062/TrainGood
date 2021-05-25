@@ -22,7 +22,7 @@ As Heroku has cold start, please wait for awhile to let the server start at firs
 | Delete comment | 1. Admin account can delete the comment. <br> 2. If the user is not the admin, he cannot delete the comment. | /delcomment/:commentid | Get |
 | Show the top trainers | Users can view the top trainers with the highest rating. | /bestpt | Get |
 
-## Features of Frontend API Server
+## Features of Frontend Server
 | Functions              | Detail                                            | URL                         |
 | :--------------------: | ------------------------------------------------- | --------------------------- |
 | Home Page | 1. You can find the signup and showing trainers button here. <br> 2. You can find the top trainers here. | / |
