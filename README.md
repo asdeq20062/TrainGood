@@ -82,7 +82,7 @@ BROWSER_API_HOST=<YOUR_API_URL>
 Edit the line as following:
 ```
 ...
-"start": "NEXT_PUBLIC_APP_ENV=prod next start -p $port
+"start": "NEXT_PUBLIC_APP_ENV=prod next start -p $PORT
 ...
 ```
 Furthermore, please don't use compose up to deploy on Heroku. You should build the images separately and push it to Heroku as followings:
