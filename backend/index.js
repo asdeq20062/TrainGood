@@ -12,7 +12,7 @@ const { loginController } = require('./controller/loginController');
 const { memberDetailsController } = require('./controller/memberDetailsController');
 const { updateMemberDetailsController } = require('./controller/updateMemberDetailsController');
 const { ratePtController } = require('./controller/ratePtController');
-const { ShowAllPtController } = require('./controller/showAllPtController');
+const { showAllPtController } = require('./controller/showAllPtController');
 const { countAllPtController } = require('./controller/countAllPtController');
 const { addCommentController } = require('./controller/addCommentController');
 const { getCommentController } = require('./controller/getCommentController');
@@ -50,7 +50,7 @@ app.post('/updatememberdetails', verify_token, updateMemberDetailsController);
 app.post('/ratept', verify_token, ratePtController);
 
 // Show all personal trainers
-app.get('/showallpt/:page', ShowAllPtController);
+app.get('/showallpt/:page', showAllPtController);
 
 // Count all personal trainers
 app.get('/countallpt', countAllPtController);
